@@ -18,7 +18,7 @@ const NIM_API_KEY = process.env.NIM_API_KEY;
 // 🔥 Dual model config
 const PRIMARY_MODEL = 'z-ai/glm5'; // modelo principal (rápido/coherente)
 const FORMAT_MODEL = 'z-ai/glm4.7'; // modelo que arregla formato
-const ENABLE_DUAL_MODEL = false;
+const ENABLE_DUAL_MODEL = true;
 
 // Toggles
 const SHOW_REASONING = false;
@@ -175,4 +175,3 @@ app.listen(PORT, () => {
   console.log(`🚀 Proxy running on port ${PORT}`);
   console.log(`🔥 Dual model: ${ENABLE_DUAL_MODEL ? 'ON' : 'OFF'}`);
 });
-```
