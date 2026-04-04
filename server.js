@@ -18,7 +18,7 @@ const NIM_API_KEY = process.env.NIM_API_KEY;
 // 🔥 Dual model config
 const PRIMARY_MODEL = 'z-ai/glm5'; // modelo principal (rápido/coherente)
 const FORMAT_MODEL = 'z-ai/glm4.7'; // modelo que arregla formato
-const ENABLE_DUAL_MODEL = true;
+const ENABLE_DUAL_MODEL = false;
 
 // Toggles
 const SHOW_REASONING = false;
