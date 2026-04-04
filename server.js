@@ -73,7 +73,7 @@ app.post('/v1/chat/completions', async (req, res) => {
       model: nimModel,
       messages: messages,
       temperature: temperature || 0.6,
-      max_tokens: max_tokens || 9024,
+      max_tokens: max_tokens || 3000,
       extra_body: ENABLE_THINKING_MODE ? { chat_template_kwargs: { thinking: true } } : undefined,
       stream: ENABLE_DUAL_MODEL ? false : (stream || false)
     };
@@ -92,22 +92,26 @@ app.post('/v1/chat/completions', async (req, res) => {
     // 🔥 Segunda llamada (formateo)
     if (ENABLE_DUAL_MODEL && generatedText) {
       try {
-        const formatPrompt = `Reescribe el siguiente texto sin cambiar su contenido ni significado.
+        const MAX_FORMAT_LENGTH = 4000;
+
+const trimmedText = generatedText.length > MAX_FORMAT_LENGTH
+  ? generatedText.slice(0, MAX_FORMAT_LENGTH)
+  : generatedText;
+
+const formatPrompt = `Reescribe el siguiente texto sin cambiar su contenido ni significado.
 
 Reglas:
 - separar correctamente en párrafos
 - usar saltos de línea dobles
-- mejorar legibilidad
-- NO agregar ni quitar información
+- NO cambiar nada del contenido
 
 Texto:
-${generatedText}`;
-
+${trimmedText}`;
         const formatResponse = await axios.post(`${NIM_API_BASE}/chat/completions`, {
           model: FORMAT_MODEL,
           messages: [{ role: 'user', content: formatPrompt }],
           temperature: 0.3,
-          max_tokens: max_tokens || 9024
+          max_tokens: max_tokens || 3000
         }, {
           headers: {
             'Authorization': `Bearer ${NIM_API_KEY}`,
