@@ -189,36 +189,6 @@ app.post('/v1/chat/completions', async (req, res) => {
         model: model,
         choices: response.data.choices.map(choice => {
           let fullContent = choice.message?.content || '';
-
-if (fullContent.includes('\n')) {
-  const firstLine = fullContent.split('\n')[0].toLowerCase();
-
-  if (
-    firstLine.includes("debo") ||
-    firstLine.includes("should") ||
-    firstLine.includes("tengo que")
-  ) {
-    fullContent = fullContent.split('\n').slice(1).join('\n');
-  }
-}          
-// 🔥 FILTRO DE "PENSAMIENTOS" (DeepSeek fix)
-const lines = fullContent.split('\n');
-
-// eliminar líneas tipo pensamiento (heurística simple)
-const filteredLines = lines.filter(line => {
-  const lower = line.toLowerCase().trim();
-
-  return !(
-    lower.startsWith("no debo") ||
-    lower.startsWith("debo") ||
-    lower.startsWith("tengo que") ||
-    lower.startsWith("i should") ||
-    lower.startsWith("i must") ||
-    lower.startsWith("(") // pensamientos entre paréntesis
-  );
-});
-
-fullContent = filteredLines.join('\n');
           
           if (SHOW_REASONING && choice.message?.reasoning_content) {
             fullContent = '<think>\n' + choice.message.reasoning_content + '\n</think>\n\n' + fullContent;
