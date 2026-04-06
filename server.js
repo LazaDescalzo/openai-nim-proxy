@@ -190,6 +190,17 @@ app.post('/v1/chat/completions', async (req, res) => {
         choices: response.data.choices.map(choice => {
           let fullContent = choice.message?.content || '';
 
+if (fullContent.includes('\n')) {
+  const firstLine = fullContent.split('\n')[0].toLowerCase();
+
+  if (
+    firstLine.includes("debo") ||
+    firstLine.includes("should") ||
+    firstLine.includes("tengo que")
+  ) {
+    fullContent = fullContent.split('\n').slice(1).join('\n');
+  }
+}          
 // 🔥 FILTRO DE "PENSAMIENTOS" (DeepSeek fix)
 const lines = fullContent.split('\n');
 
